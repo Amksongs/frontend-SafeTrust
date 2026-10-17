@@ -41,7 +41,7 @@ jest.mock("@creit.tech/stellar-wallets-kit", () => {
 });
 
 import { kit as authKit } from "@/lib/stellar/wallet-kit";
-import { kit as escrowKit, signTransaction } from "../wallet-kit";
+import { kit as escrowKit, signTransaction } from "./wallet-kit";
 
 const constructed = (
   jest.requireMock("@creit.tech/stellar-wallets-kit") as {
@@ -69,11 +69,11 @@ it("signs escrow transactions with the wallet chosen at connect time", async () 
 });
 
 it("deduplicates concurrent loads and survives module replacement", async () => {
-  const { getKit } = await import("../wallet-kit");
+  const { getKit } = await import("./wallet-kit");
   const [first, second] = await Promise.all([getKit(), getKit()]);
   expect(first).toBe(second);
   jest.resetModules();
-  const reloaded = await import("../wallet-kit");
+  const reloaded = await import("./wallet-kit");
   expect(await reloaded.getKit()).toBe(first);
   expect(constructed).toHaveBeenCalledTimes(1);
 });
@@ -83,7 +83,7 @@ it.each([
   ["lobstr", "LOBSTR"],
 ])("restores %s as the signer after a browser refresh", async (id, name) => {
   const { useGlobalAuthenticationStore } = await import("@/core/store/data");
-  const { getKit, signTransaction } = await import("../wallet-kit");
+  const { getKit, signTransaction } = await import("./wallet-kit");
   await useGlobalAuthenticationStore
     .getState()
     .connectWalletStore("GRESTORED", name, id);

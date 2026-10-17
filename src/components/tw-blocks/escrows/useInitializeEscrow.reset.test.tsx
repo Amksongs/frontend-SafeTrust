@@ -7,8 +7,8 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import { Keypair } from "@stellar/stellar-sdk";
 import { WalletProvider } from "@/components/tw-blocks/wallet-kit/WalletProvider";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { useInitializeEscrow as useSingleRelease } from "../single-release/initialize-escrow/form/useInitializeEscrow";
-import { useInitializeEscrow as useMultiRelease } from "../multi-release/initialize-escrow/form/useInitializeEscrow";
+import { useInitializeEscrow as useSingleRelease } from "./single-release/initialize-escrow/form/useInitializeEscrow";
+import { useInitializeEscrow as useMultiRelease } from "./multi-release/initialize-escrow/form/useInitializeEscrow";
 
 const mockMutateAsync = jest.fn();
 const mockWallet = Keypair.random().publicKey();

@@ -1,5 +1,5 @@
 import { TextEncoder, TextDecoder } from "node:util";
-// SDK 14 uses browser encoding APIs that JSDOM does not install.
+
 if (typeof globalThis.TextEncoder === "undefined")
   Object.defineProperty(globalThis, "TextEncoder", {
     value: TextEncoder,
@@ -13,10 +13,8 @@ if (typeof globalThis.TextDecoder === "undefined")
 
 import "@testing-library/jest-dom";
 
-// Prevent server-only import failures in Jest jsdom test environment
 jest.mock("server-only", () => ({}));
 
-// Ensure Web Fetch API primitives are attached to global in Jest JSDOM environment
 if (
   typeof global.Request === "undefined" &&
   typeof globalThis.Request !== "undefined"
@@ -27,7 +25,6 @@ if (
   global.fetch = globalThis.fetch;
 }
 
-// Provide fallback environment variables for tests
 process.env.NEXT_PUBLIC_FIREBASE_API_KEY =
   process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "mock-api-key";
 process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN =
@@ -49,3 +46,19 @@ global.ResizeObserver = class ResizeObserver {
   unobserve() {}
   disconnect() {}
 };
+
+if (typeof window !== "undefined") {
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    value: (query: string): MediaQueryList => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: () => undefined,
+      removeListener: () => undefined,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+      dispatchEvent: () => false,
+    }),
+  });
+}

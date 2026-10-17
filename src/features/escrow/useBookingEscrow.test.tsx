@@ -11,11 +11,11 @@ import {
   seen,
   setEscrowEnv,
   deferred,
-} from "../testing/escrow-harness";
+} from "@/test/harness/escrow";
 import {
   useBookingEscrowFlow,
   type UseBookingEscrowFlowOptions,
-} from "../useBookingEscrow";
+} from "./useBookingEscrow";
 import {
   activeBookingKey,
   createIntent,
@@ -24,17 +24,17 @@ import {
   receiptKey,
   saveIntent,
   type BookingEscrowState,
-} from "../booking-escrow.machine";
+} from "./booking-escrow.machine";
 
 // virtual: the package's CJS entry (dist/index.cjs) is missing upstream, and
 // the tests replace the whole module anyway.
 jest.mock(
   "@trustless-work/escrow",
-  () => require("../testing/escrow-harness").trustlessWorkModule(),
+  () => require("@/test/harness/escrow").trustlessWorkModule(),
   { virtual: true },
 );
 jest.mock("@/components/tw-blocks/wallet-kit/wallet-kit", () =>
-  require("../testing/escrow-harness").walletKitModule(),
+  require("@/test/harness/escrow").walletKitModule(),
 );
 
 const FAST = { pollIntervalMs: 10, pollTimeoutMs: 80 };
@@ -394,7 +394,7 @@ describe("Test 5: amount consistency", () => {
   });
 
   it("accepts a booking with zero tax", async () => {
-    const { computeBookingPrice } = require("../pricing");
+    const { computeBookingPrice } = require("./pricing");
     const booking = makeBooking({
       price: computeBookingPrice({
         nightlyRate: 10,

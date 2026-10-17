@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import LoginPage from "../Login";
+import LoginPage from "./Login";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { applyRememberMe } from "@/lib/auth/persistence";
 import { setSessionCookie } from "@/lib/auth/session";
@@ -62,12 +62,12 @@ jest.mock("@/core/store/data", () => ({
   ),
 }));
 
-jest.mock("../ui/Illustration", () => {
+jest.mock("./ui/Illustration", () => {
   const MockIllustration = () => <div data-testid="illustration" />;
   MockIllustration.displayName = "MockIllustration";
   return MockIllustration;
 });
-jest.mock("../FreighterSignInButton", () => ({
+jest.mock("./FreighterSignInButton", () => ({
   __esModule: true,
   default: () => <button>Continue with Freighter</button>,
 }));

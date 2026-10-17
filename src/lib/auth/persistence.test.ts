@@ -4,7 +4,7 @@ import {
   setPersistence,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { applyRememberMe, getRememberMe } from "../persistence";
+import { applyRememberMe, getRememberMe } from "./persistence";
 
 jest.mock("firebase/auth", () => ({
   browserLocalPersistence: { type: "LOCAL" },

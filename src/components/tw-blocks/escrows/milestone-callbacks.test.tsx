@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { SendTransactionResponse } from "@trustless-work/escrow/types";
-import { ApproveMilestone } from "../multi-release/approve-milestone/ApproveMilestone";
-import { ChangeMilestoneStatus } from "../multi-release/change-milestone-status/ChangeMilestoneStatus";
+import { ApproveMilestone } from "./multi-release/approve-milestone/ApproveMilestone";
+import { ChangeMilestoneStatus } from "./multi-release/change-milestone-status/ChangeMilestoneStatus";
 import { toast } from "sonner";
 
 const mockMutateAsync = jest.fn();

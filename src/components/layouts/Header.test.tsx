@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { Header } from "../Header";
+import { Header } from "./Header";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -80,7 +80,9 @@ describe("Header", () => {
 
   it("does not show a dashboard link when signed out", () => {
     render(<Header />);
-    expect(screen.queryByRole("link", { name: /dashboard/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /dashboard/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("navigates to /dashboard/profile when user button is clicked", () => {

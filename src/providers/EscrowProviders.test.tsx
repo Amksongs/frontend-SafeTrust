@@ -22,7 +22,7 @@ jest.mock("@/components/tw-blocks/providers/EscrowProvider", () => ({
   EscrowProvider: ({ children }: { children: ReactNode }) => children,
 }));
 
-import { EscrowProviders } from "../EscrowProviders";
+import { EscrowProviders } from "./EscrowProviders";
 import {
   STELLAR_NETWORK,
   TRUSTLESS_WORK_API_URL,

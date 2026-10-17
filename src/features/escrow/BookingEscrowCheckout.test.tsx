@@ -17,34 +17,34 @@ import {
   seen,
   setEscrowEnv,
   chain,
-} from "../testing/escrow-harness";
-import { BookingEscrowCheckout } from "../BookingEscrowCheckout";
+} from "@/test/harness/escrow";
+import { BookingEscrowCheckout } from "./BookingEscrowCheckout";
 import {
   activeBookingKey,
   createIntent,
   saveIntent,
-} from "../booking-escrow.machine";
+} from "./booking-escrow.machine";
 import { PriceCalculator } from "@/components/rooms/booking/PriceCalculator";
 import { BookingButton } from "@/components/rooms/booking/BookingButton";
 import { formatAmount } from "@/lib/format";
 
 jest.mock(
   "@trustless-work/escrow",
-  () => require("../testing/escrow-harness").trustlessWorkModule(),
+  () => require("@/test/harness/escrow").trustlessWorkModule(),
   { virtual: true },
 );
 jest.mock("@/components/tw-blocks/wallet-kit/wallet-kit", () =>
-  require("../testing/escrow-harness").walletKitModule(),
+  require("@/test/harness/escrow").walletKitModule(),
 );
 jest.mock("@/hooks/useWallet", () => ({
   useWallet: () => ({
-    address: require("../testing/escrow-harness").GUEST,
+    address: require("@/test/harness/escrow").GUEST,
     connect: jest.fn(),
   }),
 }));
 jest.mock("@/core/store/data", () => ({
   useGlobalAuthenticationStore: () => ({
-    address: require("../testing/escrow-harness").GUEST,
+    address: require("@/test/harness/escrow").GUEST,
   }),
 }));
 
@@ -275,7 +275,7 @@ it("Test 5 (UI): displayed total === deployed amount === funded amount", async (
   expect(formatAmount(seen.deploy!.amount as number)).toBe(calculatorTotal);
   expect(seen.fund![0].amount).toBe(seen.deploy!.amount);
   expect(seen.deploy!.platformFee).toBe(
-    require("../config").PLATFORM_FEE_PERCENT,
+    require("./config").PLATFORM_FEE_PERCENT,
   );
   expect(seen.deploy!.title).toBe("La sabana sur: 3 nights");
 });

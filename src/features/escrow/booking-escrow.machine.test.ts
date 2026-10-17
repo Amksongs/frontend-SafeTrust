@@ -19,9 +19,9 @@ import {
   type BookingDetails,
   type BookingEscrowIntent,
   type BookingEscrowState,
-} from "../booking-escrow.machine";
-import { PLATFORM_FEE_PERCENT } from "../config";
-import { computeBookingPrice, countNights } from "../pricing";
+} from "./booking-escrow.machine";
+import { PLATFORM_FEE_PERCENT } from "./config";
+import { computeBookingPrice, countNights } from "./pricing";
 
 const guest = Keypair.random().publicKey();
 const host = Keypair.random().publicKey();
@@ -77,7 +77,7 @@ describe("pricing", () => {
     process.env.NEXT_PUBLIC_PLATFORM_FEE_PERCENT = "7";
     jest.isolateModules(() => {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const config = require("../config");
+      const config = require("./config");
       expect(config.PLATFORM_FEE_PERCENT).toBe(7);
     });
     process.env.NEXT_PUBLIC_PLATFORM_FEE_PERCENT = previous;

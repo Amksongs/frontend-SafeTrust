@@ -5,7 +5,7 @@ import {
   APARTMENT_LISTINGS,
   APARTMENT_LOCATIONS,
   getApartmentById,
-} from "./apartmentListings";
+} from "./mockData/apartmentListings";
 
 describe("APARTMENT_LISTINGS", () => {
   it("contains unique listing IDs and unique lead photos", () => {

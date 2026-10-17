@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { SideBar } from "../SideBar";
-import { NAV_ITEMS } from "../nav-items";
+import { SideBar } from "./SideBar";
+import { NAV_ITEMS } from "./nav-items";
 import { usePathname } from "next/navigation";
 
 jest.mock("next/navigation", () => ({

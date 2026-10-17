@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { GoogleSignInButton } from "../GoogleSignInButton";
+import { GoogleSignInButton } from "./GoogleSignInButton";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { FirebaseError } from "firebase/app";

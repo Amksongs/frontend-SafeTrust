@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { FirebaseError } from "firebase/app";
 import { sendPasswordResetEmail } from "firebase/auth";
-import ForgotPasswordForm from "../ForgotPasswordForm";
+import ForgotPasswordForm from "./ForgotPasswordForm";
 import { auth } from "@/lib/firebase";
 
 jest.mock("next/navigation", () => ({

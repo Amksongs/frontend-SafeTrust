@@ -1,4 +1,4 @@
-import { useGlobalAuthenticationStore as store } from "../index";
+import { useGlobalAuthenticationStore as store } from "./index";
 
 beforeEach(() => {
   localStorage.clear();

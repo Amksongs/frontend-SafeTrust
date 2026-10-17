@@ -1,5 +1,5 @@
-import { clientSchema } from "../env";
-import { serverSchema } from "../env.server";
+import { clientSchema } from "./env";
+import { serverSchema } from "./env.server";
 
 describe("Environment Variable Contract", () => {
   const validFirebaseConfig = {

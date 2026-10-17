@@ -16,8 +16,8 @@ import {
   Operation,
   TransactionBuilder,
 } from "@stellar/stellar-sdk";
-import type { BookingDetails } from "../booking-escrow.machine";
-import { computeBookingPrice } from "../pricing";
+import type { BookingDetails } from "@/features/escrow/booking-escrow.machine";
+import { computeBookingPrice } from "@/features/escrow/pricing";
 
 export interface FakeEscrow {
   engagementId: string;
@@ -210,7 +210,7 @@ export function deferred<T>() {
  * shared with the test file:
  *
  *   jest.mock("@trustless-work/escrow", () =>
- *     require("@/features/escrow/testing/escrow-harness").trustlessWorkModule());
+ *     require("@/test/harness/escrow").trustlessWorkModule());
  */
 export function trustlessWorkModule() {
   const noop = () => ({});
