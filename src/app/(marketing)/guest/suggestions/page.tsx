@@ -20,6 +20,7 @@ import HotelHeader from "@/components/listings/HotelHeader";
 import { PageContainer } from "@/components/layouts/PageContainer";
 import { getConversationIdForApartment } from "@/lib/conversationRoutes";
 import { APARTMENT_LISTINGS } from "@/lib/mockData/apartmentListings";
+import { ListingLocation } from "@/features/listings/detail/ListingLocation";
 
 export default function GuestSuggestionsPage() {
   const router = useRouter();
@@ -306,6 +307,11 @@ export default function GuestSuggestionsPage() {
               <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                 {selected.description}
               </p>
+            </div>
+
+            {/* Where you'll stay map section */}
+            <div className="border-t border-gray-200 dark:border-slate-800 pt-4">
+              <ListingLocation listing={selected} />
             </div>
           </main>
 
