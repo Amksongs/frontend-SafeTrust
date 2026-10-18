@@ -64,6 +64,11 @@ export const clientSchema = z.object({
   NEXT_PUBLIC_API_KEY: z.string().optional(),
 });
 
+const runtimeClientSchema = clientSchema.extend({
+  NEXT_PUBLIC_PLATFORM_WALLET_ADDRESS: z.string().optional(),
+  NEXT_PUBLIC_DISPUTE_RESOLVER_ADDRESS: z.string().optional(),
+});
+
 function readClientEnv() {
   return {
     NODE_ENV: process.env.NODE_ENV,
@@ -111,7 +116,9 @@ function readClientEnv() {
 export type ClientEnv = z.infer<typeof clientSchema>;
 
 function parseClientEnvValue<K extends keyof ClientEnv>(key: K): ClientEnv[K] {
-  return clientSchema.shape[key].parse(readClientEnv()[key]) as ClientEnv[K];
+  return runtimeClientSchema.shape[key].parse(
+    readClientEnv()[key],
+  ) as ClientEnv[K];
 }
 
 export const clientEnv = new Proxy({} as ClientEnv, {

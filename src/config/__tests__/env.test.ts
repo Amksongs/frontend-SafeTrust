@@ -1,4 +1,4 @@
-import { clientSchema } from "../env";
+import { clientEnv, clientSchema } from "../env";
 import { serverEnv, serverSchema } from "../env.server";
 
 describe("Environment Variable Contract", () => {
@@ -112,6 +112,29 @@ describe("Environment Variable Contract", () => {
           NEXT_PUBLIC_PLATFORM_WALLET_ADDRESS: invalidFormatAddress,
         }).success,
       ).toBe(false);
+    });
+
+    it("lets escrow validation report invalid configured role addresses", () => {
+      const originalPlatformAddress =
+        process.env.NEXT_PUBLIC_PLATFORM_WALLET_ADDRESS;
+      process.env.NEXT_PUBLIC_PLATFORM_WALLET_ADDRESS = "not-a-key";
+
+      try {
+        expect(clientEnv.NEXT_PUBLIC_PLATFORM_WALLET_ADDRESS).toBe("not-a-key");
+        expect(
+          clientSchema.safeParse({
+            ...validFirebaseConfig,
+            NEXT_PUBLIC_PLATFORM_WALLET_ADDRESS: "not-a-key",
+          }).success,
+        ).toBe(false);
+      } finally {
+        if (originalPlatformAddress === undefined) {
+          delete process.env.NEXT_PUBLIC_PLATFORM_WALLET_ADDRESS;
+        } else {
+          process.env.NEXT_PUBLIC_PLATFORM_WALLET_ADDRESS =
+            originalPlatformAddress;
+        }
+      }
     });
   });
 
