@@ -4,6 +4,21 @@ This document defines the architectural layers, boundaries, and import contracts
 
 ---
 
+## Test and Mock Conventions
+
+- Keep unit and integration tests co-located with their subjects as
+  `*.test.ts` or `*.test.tsx` files under `src/`; do not add `__tests__`
+  directories.
+- Reserve the root `__mocks__/` directory for Jest manual package mocks. Keep
+  demo data and fixtures with their features, and shared test helpers in
+  `src/test/`.
+- Use `renderWithProviders` from `src/test/render.tsx` when tests need the
+  React Query and theme providers or seeded authentication state.
+- Keep browser end-to-end tests in `e2e/` as Playwright specs, fixtures, and
+  support files.
+
+---
+
 ## 1. Directory Structure & Layer Map
 
 ```text
@@ -32,14 +47,14 @@ src/
 
 ## 2. Permitted vs Forbidden Import Table
 
-| Layer | May import | Must NOT import |
-|---|---|---|
-| `app/` | Everything except another route's private files | — |
-| `features/<x>` | `components/ui`, `components/layout`, `lib`, `config/env`, `types`, **other features only via their `index.ts`** | `app/`, `server/`, another feature's internal modules (`@/features/*/*`) |
-| `components/ui` | `lib/utils` only | `features`, `hooks`, `providers`, `data`, `server/` |
-| `components/layout` | `components/ui`, `lib`, `features/*/index.ts` (auth state only) | `server/`, demo data |
-| `server/` | `config/env.server`, `lib` | Anything client (`"use client"` modules, React) |
-| `lib/` | `config`, `types` | `features`, `components`, `server/` |
+| Layer               | May import                                                                                                       | Must NOT import                                                          |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `app/`              | Everything except another route's private files                                                                  | —                                                                        |
+| `features/<x>`      | `components/ui`, `components/layout`, `lib`, `config/env`, `types`, **other features only via their `index.ts`** | `app/`, `server/`, another feature's internal modules (`@/features/*/*`) |
+| `components/ui`     | `lib/utils` only                                                                                                 | `features`, `hooks`, `providers`, `data`, `server/`                      |
+| `components/layout` | `components/ui`, `lib`, `features/*/index.ts` (auth state only)                                                  | `server/`, demo data                                                     |
+| `server/`           | `config/env.server`, `lib`                                                                                       | Anything client (`"use client"` modules, React)                          |
+| `lib/`              | `config`, `types`                                                                                                | `features`, `components`, `server/`                                      |
 
 ---
 
