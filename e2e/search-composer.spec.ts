@@ -15,7 +15,6 @@ test("Where draft applies in one navigation and retains rent filters", async ({
   page,
 }) => {
   await page.goto("/rent?categories=Family&bedrooms=2&min=50&max=200");
-  const trigger = searchTrigger(page);
   await openComposer(page);
 
   const destination = page.getByRole("searchbox", {
@@ -108,7 +107,6 @@ test("searching from the dashboard targets rent without carrying unrelated filte
   page,
 }) => {
   await page.goto("/dashboard/escrow-dashboard?categories=Family&bedrooms=2");
-  const trigger = searchTrigger(page);
   await openComposer(page);
   await expect(
     page.getByRole("option", { name: /Nearby.*Find what's around you/ }),

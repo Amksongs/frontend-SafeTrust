@@ -18,7 +18,7 @@ import {
 } from "@/components/listings/filters/useRentFilters";
 import {
   EMPTY_STAY_SEARCH,
-  readStaySearch,
+  parseStaySearch,
   writeStaySearch,
 } from "./stay-search";
 import type { ComposerSection, SearchDraft } from "./composer-types";
@@ -55,6 +55,7 @@ export function SearchComposer() {
   const paramsString = params.toString();
   const desktop = useIsDesktop();
   const titleId = useId();
+  const today = localToday();
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<ComposerSection["id"]>("where");
   const [draft, setDraftState] = useState<SearchDraft>({
@@ -66,7 +67,7 @@ export function SearchComposer() {
   const currentParams = new URLSearchParams(paramsString);
   const listingPage = LISTING_PAGES.has(pathname);
   const applied: SearchDraft = {
-    ...readStaySearch(currentParams),
+    ...parseStaySearch(currentParams, today),
     location: listingPage ? parseFilters(currentParams).location : null,
     nearby: listingPage && currentParams.get("sort") === "nearest",
   };
@@ -108,7 +109,6 @@ export function SearchComposer() {
       nearby: false,
     });
 
-  const today = localToday();
   const body = (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain p-4">

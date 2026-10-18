@@ -49,6 +49,11 @@ const eslintConfig = [
         {
           patterns: [
             {
+              group: ["@/test", "@/test/**"],
+              message:
+                "Shared test helpers may only be imported by tests and other test helpers.",
+            },
+            {
               group: ["../../../*"],
               message: "Use the @/ alias.",
             },
@@ -74,6 +79,11 @@ const eslintConfig = [
         {
           patterns: [
             {
+              group: ["@/test", "@/test/**"],
+              message:
+                "Shared test helpers may only be imported by tests and other test helpers.",
+            },
+            {
               group: ["@/lib/mockData*", "@/lib/demo*"],
               message:
                 "Direct mock/demo data imports are restricted to explicit legacy pages.",
@@ -95,6 +105,11 @@ const eslintConfig = [
         "error",
         {
           patterns: [
+            {
+              group: ["@/test", "@/test/**"],
+              message:
+                "Shared test helpers may only be imported by tests and other test helpers.",
+            },
             {
               group: [
                 "@/features/*",
@@ -125,6 +140,11 @@ const eslintConfig = [
         {
           patterns: [
             {
+              group: ["@/test", "@/test/**"],
+              message:
+                "Shared test helpers may only be imported by tests and other test helpers.",
+            },
+            {
               group: ["@/features/*/*"],
               message: "Import another feature through its index.ts.",
             },
@@ -150,9 +170,13 @@ const eslintConfig = [
         {
           patterns: [
             {
-              group: ["@/features/*", "@/components/*", "@/server/*"],
+              group: ["@/test", "@/test/**"],
               message:
-                "lib/ is shared and must not depend on features or UI.",
+                "Shared test helpers may only be imported by tests and other test helpers.",
+            },
+            {
+              group: ["@/features/*", "@/components/*", "@/server/*"],
+              message: "lib/ is shared and must not depend on features or UI.",
             },
             {
               group: ["../../../*"],
@@ -168,7 +192,18 @@ const eslintConfig = [
   {
     files: ["src/components/ui/ThemeToggle.tsx"],
     rules: {
-      "no-restricted-imports": "off",
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/test", "@/test/**"],
+              message:
+                "Shared test helpers may only be imported by tests and other test helpers.",
+            },
+          ],
+        },
+      ],
     },
   },
   // Temporary allowlist for legacy lib/ files importing components.
@@ -186,13 +221,35 @@ const eslintConfig = [
       "src/lib/mockData/offers.ts",
     ],
     rules: {
-      "no-restricted-imports": "off",
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/test", "@/test/**"],
+              message:
+                "Shared test helpers may only be imported by tests and other test helpers.",
+            },
+          ],
+        },
+      ],
     },
   },
   {
-    files: ["src/hooks/**/*.{ts,tsx}", "**/*.test.{ts,tsx}"],
+    files: ["src/hooks/**/*.{ts,tsx}"],
     rules: {
-      "no-restricted-imports": "off",
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/test", "@/test/**"],
+              message:
+                "Shared test helpers may only be imported by tests and other test helpers.",
+            },
+          ],
+        },
+      ],
     },
   },
   {
@@ -218,6 +275,23 @@ const eslintConfig = [
       "src/components/hotels/overall/HotelGrid.tsx",
       "src/components/listings/BedroomTabs.tsx",
     ],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/test", "@/test/**"],
+              message:
+                "Shared test helpers may only be imported by tests and other test helpers.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/*.test.{ts,tsx}", "src/test/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-imports": "off",
     },
