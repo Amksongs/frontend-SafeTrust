@@ -4,6 +4,21 @@ This document defines the architectural layers, boundaries, and import contracts
 
 ---
 
+## Test and Mock Conventions
+
+- Keep unit and integration tests co-located with their subjects as
+  `*.test.ts` or `*.test.tsx` files under `src/`; do not add `__tests__`
+  directories.
+- Reserve the root `__mocks__/` directory for Jest manual package mocks. Keep
+  demo data and fixtures with their features, and shared test helpers in
+  `src/test/`.
+- Use `renderWithProviders` from `src/test/render.tsx` when tests need the
+  React Query and theme providers or seeded authentication state.
+- Keep browser end-to-end tests in `e2e/` as Playwright specs, fixtures, and
+  support files.
+
+---
+
 ## 1. Directory Structure & Layer Map
 
 ```text
