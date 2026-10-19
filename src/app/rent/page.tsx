@@ -43,6 +43,7 @@ import {
 import Link from "next/link";
 import { LazyMotionProvider } from "@/components/ui/LazyMotionProvider";
 import { RentReveal } from "@/components/listings/RentMotion";
+import { normalizeSearchText } from "@/lib/searchText";
 
 const ApartmentGrid = dynamic(
   () => import("@/components/listings/ApartmentGrid"),
@@ -101,13 +102,6 @@ const FilterSidebar = dynamic(
     ),
   },
 );
-
-const normalizeSearchText = (value: string) =>
-  value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toLocaleLowerCase();
 
 function RentPageContent() {
   const router = useRouter();

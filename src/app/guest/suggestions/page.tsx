@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Heart,
   MapPin,
@@ -22,14 +22,37 @@ import { getConversationIdForApartment } from "@/lib/conversationRoutes";
 import { APARTMENT_LISTINGS } from "@/lib/mockData/apartmentListings";
 import { GeolocationProvider } from "@/providers/GeolocationProvider";
 import { ListingLocation } from "@/features/listings/detail/ListingLocation";
+import { normalizeSearchText } from "@/lib/searchText";
 
 export default function GuestSuggestionsPage() {
+  return (
+    <Suspense fallback={null}>
+      <GeolocationProvider>
+        <GuestSuggestionsContent />
+      </GeolocationProvider>
+    </Suspense>
+  );
+}
+
+function GuestSuggestionsContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const normalizedQuery = normalizeSearchText(searchParams.get("q") ?? "");
+  const listings = APARTMENT_LISTINGS.filter(
+    (apartment) =>
+      normalizedQuery.length === 0 ||
+      normalizeSearchText(`${apartment.name} ${apartment.address}`).includes(
+        normalizedQuery,
+      ),
+  );
   const [selectedId, setSelectedId] = useState(APARTMENT_LISTINGS[0].id);
   const [favorites, setFavorites] = useState<string[]>([]);
 
-  const selected = APARTMENT_LISTINGS.find((a) => a.id === selectedId)!;
-  const selectedConversationId = getConversationIdForApartment(selected.name);
+  const selected =
+    listings.find((apartment) => apartment.id === selectedId) ?? listings[0];
+  const selectedConversationId = selected
+    ? getConversationIdForApartment(selected.name)
+    : null;
 
   const toggleFavorite = (id: string) => {
     setFavorites((curr) =>
@@ -38,7 +61,6 @@ export default function GuestSuggestionsPage() {
   };
 
   return (
-    <GeolocationProvider>
       <div
       className="min-h-screen bg-white dark:bg-slate-900
                     text-gray-900 dark:text-white"
@@ -83,7 +105,7 @@ export default function GuestSuggestionsPage() {
                 Suggestions
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {APARTMENT_LISTINGS.length} units available
+                {listings.length} units available
               </p>
               <Link
                 href="/rent"
@@ -98,12 +120,12 @@ export default function GuestSuggestionsPage() {
               aria-label="Suggested stays"
               className="m-0 flex list-none gap-3 overflow-x-auto p-0 pb-2 lg:block lg:max-h-[75dvh] lg:space-y-3 lg:overflow-y-auto lg:pr-1"
             >
-              {APARTMENT_LISTINGS.map((apt) => (
+              {listings.map((apt) => (
                 <li
                   key={apt.id}
                   className={cn(
                     "relative flex w-72 shrink-0 items-start gap-2 rounded-xl border p-3 transition-colors lg:w-full",
-                    selectedId === apt.id
+                    selected?.id === apt.id
                       ? "border-orange-400 bg-orange-50 dark:bg-orange-900/10"
                       : "border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800",
                   )}
@@ -120,7 +142,7 @@ export default function GuestSuggestionsPage() {
                         setSelectedId(apt.id);
                       }
                     }}
-                    aria-pressed={selectedId === apt.id}
+                    aria-pressed={selected?.id === apt.id}
                     aria-label={`Select ${apt.name}`}
                     className="flex min-w-0 flex-1 items-start gap-2 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
                   >
@@ -204,6 +226,8 @@ export default function GuestSuggestionsPage() {
             </ul>
           </aside>
 
+          {selected ? (
+            <>
           {/* ── Center: Main image + details ── */}
           <main className="min-w-0 space-y-4">
             {/* Main image */}
@@ -398,9 +422,17 @@ export default function GuestSuggestionsPage() {
               )}
             </div>
           </aside>
+            </>
+          ) : (
+            <p
+              role="status"
+              className="text-sm text-gray-600 dark:text-gray-400 lg:col-span-2"
+            >
+              No suggested stays match your search.
+            </p>
+          )}
         </div>
       </PageContainer>
     </div>
-    </GeolocationProvider>
   );
 }

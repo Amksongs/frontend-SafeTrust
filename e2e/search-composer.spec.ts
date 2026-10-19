@@ -143,6 +143,13 @@ test("searching from suggestions retains the listing filters", async ({
   expect(applied.searchParams.get("bedrooms")).toBe("2");
   expect(applied.searchParams.get("min")).toBe("50");
   expect(applied.searchParams.get("max")).toBe("200");
+  await expect(page.getByText("2 units available")).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Jardín de Heredia House" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Casa Níspero/ }),
+  ).toHaveCount(0);
 });
 
 test("Nearby requests location only after selection and keeps filters while sorting", async ({
@@ -184,12 +191,12 @@ test("Nearby requests location only after selection and keeps filters while sort
       ),
     )
     .toBe(1);
-  await expect(
-    page.getByRole("button", { name: "Clear location" }),
-  ).toBeVisible();
   expect(new URL(page.url()).searchParams.get("sort")).toBeNull();
 
   await page.getByRole("button", { name: "Search", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Clear location" }),
+  ).toBeVisible();
   await expect
     .poll(() => new URL(page.url()).searchParams.get("sort"))
     .toBe("nearest");
