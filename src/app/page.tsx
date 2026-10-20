@@ -9,13 +9,14 @@ import {
   HomeMotionStep,
 } from "@/components/home/HomeMotion";
 import { HomeSkyline } from "@/components/home/HomeSkyline";
+import { SupportedBy } from "@/components/home/SupportedBy";
 
 export default function Page() {
   return (
     <>
       <Header />
       <HomeMotion>
-        <main className="flex min-h-dvh flex-col">
+        <main className="home-page flex min-h-dvh flex-col">
           <HomeMotionSection
             revealOnScroll={false}
             className="relative isolate overflow-hidden px-4 pb-36 pt-16 text-center sm:pb-44 sm:pt-24 lg:pb-52"
@@ -61,6 +62,12 @@ export default function Page() {
           <HomeMotionSection className="px-4 py-12">
             <HomeMotionItem>
               <DestinationCarousel />
+            </HomeMotionItem>
+          </HomeMotionSection>
+
+          <HomeMotionSection>
+            <HomeMotionItem>
+              <SupportedBy />
             </HomeMotionItem>
           </HomeMotionSection>
 
