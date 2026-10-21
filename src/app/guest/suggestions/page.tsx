@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -44,7 +44,9 @@ export default function GuestSuggestionsPage() {
                     text-gray-900 dark:text-white"
     >
       {/* Standalone header */}
-      <HotelHeader />
+      <Suspense fallback={null}>
+        <HotelHeader />
+      </Suspense>
 
       <PageContainer width="wide" className="py-6">
         <nav
