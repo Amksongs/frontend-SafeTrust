@@ -50,7 +50,7 @@ describe("AccountMenu signed out", () => {
     ).toHaveAttribute("href", "/login?redirect=%2Fdashboard%2Fnotifications");
     expect(screen.getByRole("menuitem", { name: "Profile" })).toHaveAttribute(
       "href",
-      "/login?redirect=%2Fdashboard%2Fprofile",
+      "/guest/profile",
     );
     expect(screen.getByRole("menuitem", { name: "Log in" })).toHaveAttribute(
       "href",

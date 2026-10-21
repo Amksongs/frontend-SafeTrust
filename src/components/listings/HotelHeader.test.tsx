@@ -151,7 +151,7 @@ describe("HotelHeader account menu", () => {
     ).toHaveAttribute("href", "/login?redirect=%2Fdashboard%2Fnotifications");
     expect(screen.getByRole("menuitem", { name: "Profile" })).toHaveAttribute(
       "href",
-      "/login?redirect=%2Fdashboard%2Fprofile",
+      "/guest/profile",
     );
   });
 });

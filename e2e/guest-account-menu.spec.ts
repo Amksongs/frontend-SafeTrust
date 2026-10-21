@@ -72,7 +72,7 @@ test.describe("Guest header account menu", () => {
     ).toHaveAttribute("href", "/login?redirect=%2Fdashboard%2Fnotifications");
     await expect(
       menu.getByRole("menuitem", { name: "Profile" }),
-    ).toHaveAttribute("href", "/login?redirect=%2Fdashboard%2Fprofile");
+    ).toHaveAttribute("href", "/guest/profile");
     await expect(menu.getByRole("menuitem", { name: "Log in" })).toBeVisible();
     await expect(menu.getByRole("menuitem", { name: "Sign up" })).toBeVisible();
     await expect(menu.getByRole("menuitem", { name: "Log out" })).toHaveCount(

@@ -39,9 +39,8 @@ const itemIcon = "h-4 w-4 shrink-0";
  *
  * Identity comes from `useCurrentUser` (verified Firebase ID-token claims) and
  * the trigger is disabled while auth resolves so a visitor never sees a flash
- * of somebody else's name. Until GA-06 ships the public `/guest/profile`
- * page, a signed-out Profile links to login with a return path instead of a
- * page that does not exist yet.
+ * of somebody else's name. Signed-out Profile opens the public
+ * `/guest/profile` landing (issue #655).
  */
 export function AccountMenu() {
   const { user, loading } = useCurrentUser();
@@ -97,7 +96,7 @@ export function AccountMenu() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href={protectedHref(R.profile)}>
+          <Link href={user ? R.profile : R.guestProfile}>
             <UserRound aria-hidden="true" className={itemIcon} />
             Profile
           </Link>
