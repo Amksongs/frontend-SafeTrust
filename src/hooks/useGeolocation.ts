@@ -125,3 +125,4 @@ export function resetGeolocationForTests() {
   initialized = false;
   requestInProgress = false;
   updateState(INITIAL_STATE);
+}
