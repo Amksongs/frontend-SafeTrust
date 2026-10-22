@@ -1,86 +1,127 @@
 "use client";
 
 import type { GeoPoint } from "@/types/destination";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
 export type GeoStatus =
   "idle" | "prompting" | "granted" | "denied" | "unavailable" | "error";
-
 export interface GeolocationRequestOptions {
   autoSort?: boolean;
 }
 
+interface GeolocationState {
+  status: GeoStatus;
+  position: GeoPoint | null;
+  autoSortOnPosition: boolean;
+}
+
+const INITIAL_STATE: GeolocationState = {
+  status: "idle",
+  position: null,
+  autoSortOnPosition: false,
+};
+
+let state = INITIAL_STATE;
+let initialized = false;
+let requestInProgress = false;
+const listeners = new Set<() => void>();
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+function getSnapshot() {
+  return state;
+}
+
+function updateState(patch: Partial<GeolocationState>) {
+  state = { ...state, ...patch };
+  listeners.forEach((listener) => listener());
+}
+
+function initializeGeolocation() {
+  if (initialized) return;
+  initialized = true;
+
+  if (
+    typeof navigator === "undefined" ||
+    !("geolocation" in navigator) ||
+    !window.isSecureContext
+  ) {
+    updateState({ status: "unavailable" });
+    return;
+  }
+
+  navigator.permissions
+    ?.query({ name: "geolocation" as PermissionName })
+    .then((permission) => {
+      if (permission.state === "denied" && state.status === "idle") {
+        updateState({ status: "denied" });
+      }
+    })
+    .catch(() => {});
+}
+
+function request(options: GeolocationRequestOptions = {}) {
+  if (
+    requestInProgress ||
+    state.status === "unavailable" ||
+    state.status === "denied" ||
+    state.status === "granted" ||
+    state.status === "prompting"
+  ) {
+    return;
+  }
+
+  requestInProgress = true;
+  updateState({
+    autoSortOnPosition: options.autoSort ?? true,
+    status: "prompting",
+  });
+  navigator.geolocation.getCurrentPosition(
+    ({ coords }) => {
+      requestInProgress = false;
+      updateState({
+        position: {
+          lat: Number(coords.latitude.toFixed(2)),
+          lng: Number(coords.longitude.toFixed(2)),
+        },
+        status: "granted",
+      });
+    },
+    (error) => {
+      requestInProgress = false;
+      updateState({
+        status: error.code === error.PERMISSION_DENIED ? "denied" : "error",
+      });
+    },
+    { enableHighAccuracy: false, timeout: 10_000, maximumAge: 10 * 60_000 },
+  );
+}
+
+function clear() {
+  requestInProgress = false;
+  updateState({
+    autoSortOnPosition: false,
+    position: null,
+    status: "idle",
+  });
+}
+
 export function useGeolocation() {
-  const [status, setStatus] = useState<GeoStatus>("idle");
-  const [position, setPosition] = useState<GeoPoint | null>(null);
-  const [autoSortOnPosition, setAutoSortOnPosition] = useState(false);
-  const requestInProgress = useRef(false);
+  const geo = useSyncExternalStore(subscribe, getSnapshot, () => INITIAL_STATE);
 
   useEffect(() => {
-    if (
-      typeof navigator === "undefined" ||
-      !("geolocation" in navigator) ||
-      !window.isSecureContext
-    ) {
-      setStatus("unavailable");
-      return;
-    }
-
-    let active = true;
-    navigator.permissions
-      ?.query({ name: "geolocation" as PermissionName })
-      .then((permission) => {
-        if (active && permission.state === "denied") setStatus("denied");
-      })
-      .catch(() => {});
-
-    return () => {
-      active = false;
-    };
+    initializeGeolocation();
   }, []);
 
-  const request = useCallback(
-    (options: GeolocationRequestOptions = {}) => {
-      if (
-        requestInProgress.current ||
-        status === "unavailable" ||
-        status === "denied" ||
-        status === "granted" ||
-        status === "prompting"
-      ) {
-        return;
-      }
-
-      requestInProgress.current = true;
-      setAutoSortOnPosition(options.autoSort ?? true);
-      setStatus("prompting");
-      navigator.geolocation.getCurrentPosition(
-        ({ coords }) => {
-          requestInProgress.current = false;
-          setPosition({
-            lat: Number(coords.latitude.toFixed(2)),
-            lng: Number(coords.longitude.toFixed(2)),
-          });
-          setStatus("granted");
-        },
-        (error) => {
-          requestInProgress.current = false;
-          setStatus(
-            error.code === error.PERMISSION_DENIED ? "denied" : "error",
-          );
-        },
-        { enableHighAccuracy: false, timeout: 10_000, maximumAge: 10 * 60_000 },
-      );
-    },
-    [status],
-  );
-
-  const clear = useCallback(() => {
-    requestInProgress.current = false;
-    setAutoSortOnPosition(false);
-    setPosition(null);
-    setStatus("idle");
-  }, []);
-
-  return { status, position, request, clear, autoSortOnPosition };
+  return { ...geo, request, clear };
 }
+
+export function resetGeolocationForTests() {
+  initialized = false;
+  requestInProgress = false;
+  updateState(INITIAL_STATE);
