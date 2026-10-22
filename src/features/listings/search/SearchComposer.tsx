@@ -186,6 +186,7 @@ export function SearchComposer() {
         <DialogContent
           data-testid="search-composer-dialog"
           aria-labelledby={titleId}
+          onPointerDownOutside={() => setOpen(false)}
           className="flex max-h-[85dvh] max-w-xl flex-col gap-0 overflow-hidden p-0"
         >
           <DialogTitle id={titleId} className="px-4 pt-4">
@@ -204,7 +205,10 @@ export function SearchComposer() {
     <Drawer.Root open={open} onOpenChange={handleOpenChange}>
       <Drawer.Trigger asChild>{triggerButton}</Drawer.Trigger>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-[90] bg-black/50" />
+        <Drawer.Overlay
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-[90] bg-black/50"
+        />
         <Drawer.Content
           data-testid="search-composer-sheet"
           aria-labelledby={titleId}

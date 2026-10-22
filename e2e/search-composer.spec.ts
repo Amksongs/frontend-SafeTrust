@@ -1,6 +1,7 @@
 import { test, expect, waitForHydration } from "./fixtures";
 import { APARTMENT_LISTINGS } from "../src/lib/mockData/apartmentListings";
 import { distanceKm } from "../src/lib/geo";
+import { buildIdToken, MOCK_USERS } from "./support/mock-auth";
 
 const searchTrigger = (page: import("@playwright/test").Page) =>
   page.getByRole("button", { name: /^Search stays:/ });
@@ -20,7 +21,7 @@ test("Where draft applies in one navigation and retains rent filters", async ({
   const destination = page.getByRole("searchbox", {
     name: "Search destinations",
   });
-  await destination.fill("tamarindo");
+  await destination.fill("Escalante");
   await expect(page).toHaveURL(
     "/rent?categories=Family&bedrooms=2&min=50&max=200",
   );
@@ -28,7 +29,7 @@ test("Where draft applies in one navigation and retains rent filters", async ({
   await page.getByRole("button", { name: "Search", exact: true }).click();
   await expect
     .poll(() => new URL(page.url()).searchParams.get("q"))
-    .toBe("tamarindo");
+    .toBe("Escalante");
   const applied = new URL(page.url());
   expect(applied.pathname).toBe("/rent");
   expect(applied.searchParams.get("categories")).toBe("Family");
@@ -106,6 +107,13 @@ test("Back and reload restore the applied search summary", async ({ page }) => {
 test("searching from the dashboard targets rent without carrying unrelated filters", async ({
   page,
 }) => {
+  await page.context().addCookies([
+    {
+      name: "firebase-token",
+      value: buildIdToken(MOCK_USERS.guest),
+      url: "http://localhost:3100",
+    },
+  ]);
   await page.goto("/dashboard/escrow-dashboard?categories=Family&bedrooms=2");
   await openComposer(page);
   await expect(
