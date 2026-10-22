@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 
 import { DemoBanner } from "../components/layouts/DemoBanner";
-import { AppProviders } from "../providers/AppProviders";
 import { clientEnv } from "@/config/env";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -40,10 +41,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <AppProviders>
+        <ThemeProvider
+          attribute="class"
+          storageKey="safetrust-theme"
+          defaultTheme="system"
+          enableSystem
+        >
           <DemoBanner />
           {children}
-        </AppProviders>
+          <Toaster richColors position="top-right" />
+        </ThemeProvider>
       </body>
     </html>
   );
