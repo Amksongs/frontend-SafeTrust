@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { SearchComposer } from "@/features/listings";
 import {
   Bell,
   ChevronDown,
@@ -13,6 +13,19 @@ import {
   Heart,
   Lightbulb,
 } from "lucide-react";
+
+const SearchComposer = dynamic(
+  () =>
+    import("@/features/listings/search/SearchComposer").then(
+      (module) => module.SearchComposer,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-11 min-w-0 flex-1 rounded-full border border-border bg-muted/60" />
+    ),
+  },
+);
 
 interface HotelHeaderProps {
   showHostSwitch?: boolean;
@@ -137,13 +150,7 @@ function HotelHeaderContent({ showHostSwitch }: HotelHeaderProps) {
 
         <div className="order-3 mx-0 flex min-w-0 w-full items-center gap-2 sm:order-none sm:mx-auto sm:w-auto sm:flex-1 sm:max-w-md">
           <RentDropdown />
-          <Suspense
-            fallback={
-              <div className="h-11 min-w-0 flex-1 rounded-full border border-border bg-muted/60" />
-            }
-          >
-            <SearchComposer />
-          </Suspense>
+          <SearchComposer />
         </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-3 sm:gap-5">

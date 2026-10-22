@@ -1,14 +1,18 @@
 "use client";
 
-import { Suspense } from "react";
-import { SearchComposer } from "@/features/listings";
+import dynamic from "next/dynamic";
 
-export const SearchHeader = () => (
-  <Suspense
-    fallback={
+const SearchComposer = dynamic(
+  () =>
+    import("@/features/listings/search/SearchComposer").then(
+      (module) => module.SearchComposer,
+    ),
+  {
+    ssr: false,
+    loading: () => (
       <div className="h-11 w-full min-w-0 rounded-full border border-border bg-muted/60" />
-    }
-  >
-    <SearchComposer />
-  </Suspense>
+    ),
+  },
 );
+
+export const SearchHeader = () => <SearchComposer />;

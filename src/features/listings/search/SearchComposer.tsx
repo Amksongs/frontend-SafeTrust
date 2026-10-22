@@ -96,7 +96,7 @@ export function SearchComposer() {
     if (draft.nearby) query.set("sort", "nearest");
     else if (query.get("sort") === "nearest") query.delete("sort");
 
-    const target = onListings ? pathname : "/rent";
+    const target = draft.nearby ? "/rent" : onListings ? pathname : "/rent";
     setOpen(false);
     const queryString = query.toString();
     router.push(queryString ? `${target}?${queryString}` : target);
