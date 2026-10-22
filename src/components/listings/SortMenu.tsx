@@ -39,21 +39,23 @@ export function SortMenu({
           aria-label={`Sort by: ${LABELS[value]}`}
           className="inline-flex min-h-11 items-center gap-1 rounded-md px-2 text-sm font-medium text-foreground hover:text-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <span className="text-muted-foreground">Sort by:</span> {LABELS[value]}
+          <span className="text-muted-foreground">Sort by:</span>{" "}
+          {LABELS[value]}
           <ChevronDown className="h-4 w-4" aria-hidden="true" />
         </button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-60 p-2">
-        <div role="radiogroup" aria-label="Sort results">
+        <div role="group" aria-label="Sort results">
           {options.map((option) => (
             <button
               key={option}
               type="button"
-              aria-checked={value === option}
+              aria-pressed={value === option}
               onClick={() => onChange(option)}
               className={cn(
                 "flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm hover:bg-muted",
-                value === option && "font-medium text-foreground dark:text-foreground",
+                value === option &&
+                  "font-medium text-foreground dark:text-foreground",
               )}
             >
               {LABELS[option]}

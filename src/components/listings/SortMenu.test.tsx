@@ -21,12 +21,16 @@ describe("SortMenu", () => {
     fireEvent.click(trigger);
 
     expect(
-      screen.getByRole("radiogroup", { name: "Sort results" }),
+      screen.getByRole("group", { name: "Sort results" }),
     ).toBeInTheDocument();
     const lowToHigh = screen.getByRole("button", {
       name: "Price: Low to High",
     });
     expect(lowToHigh).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Relevance" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
 
     fireEvent.click(lowToHigh);
     expect(handleChange).toHaveBeenCalledWith("price-low");
