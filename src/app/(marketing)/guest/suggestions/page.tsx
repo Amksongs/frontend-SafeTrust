@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,7 @@ import HotelHeader from "@/components/listings/HotelHeader";
 import { PageContainer } from "@/components/layouts/PageContainer";
 import { getConversationIdForApartment } from "@/lib/conversationRoutes";
 import { APARTMENT_LISTINGS } from "@/lib/mockData/apartmentListings";
+import { GeolocationProvider } from "@/providers/GeolocationProvider";
 import { ListingLocation } from "@/features/listings/detail/ListingLocation";
 
 export default function GuestSuggestionsPage() {
@@ -37,12 +38,15 @@ export default function GuestSuggestionsPage() {
   };
 
   return (
-    <div
+    <GeolocationProvider>
+      <div
       className="min-h-screen bg-white dark:bg-slate-900
                     text-gray-900 dark:text-white"
     >
       {/* Standalone header */}
-      <HotelHeader />
+      <Suspense fallback={null}>
+        <HotelHeader />
+      </Suspense>
 
       <PageContainer width="wide" className="py-6">
         <nav
@@ -399,5 +403,6 @@ export default function GuestSuggestionsPage() {
         </div>
       </PageContainer>
     </div>
+    </GeolocationProvider>
   );
 }
