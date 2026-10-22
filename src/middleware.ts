@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { edgeEnv } from "@/config/env.edge";
 import { verifyIdToken } from "@/lib/auth/verify-id-token";
 
+/**
+ * Route groups map to protected prefixes and URL patterns:
+ * - (marketing): Public browse routes (/, /rent, /hotels, /guest/suggestions) - RSC-first, no auth/wallet.
+ * - (auth): Public authentication routes (/login, /register, /forgot-password, /reset-password, /verify-email).
+ * - (app): Protected app routes (/dashboard/**, /guest/**).
+ * - (checkout): Protected escrow and checkout routes (/bookings/**, /rent/[id]/escrow/**, /hotels/[id]/book, /room).
+ */
 const PROTECTED_PREFIXES = ["/dashboard", "/guest", "/bookings"];
 
 const PROTECTED_PATTERNS = [
@@ -65,12 +73,10 @@ function isProtected(pathname: string): boolean {
  * are guarded by the x-hasura-allowed-roles claim; guests are rewritten to /403.
  */
 export async function middleware(req: NextRequest) {
-  // Edge runtime: read directly (no "server-only" import in middleware).
-  // Dev-only escape hatch: strictly disabled in production.
   if (
-    process.env.NODE_ENV !== "production" &&
-    (process.env.SKIP_AUTH_MIDDLEWARE === "true" ||
-      process.env.NEXT_PUBLIC_SKIP_AUTH_MIDDLEWARE === "true")
+    edgeEnv.NODE_ENV !== "production" &&
+    (edgeEnv.SKIP_AUTH_MIDDLEWARE ||
+      edgeEnv.NEXT_PUBLIC_SKIP_AUTH_MIDDLEWARE === "true")
   ) {
     return NextResponse.next();
   }

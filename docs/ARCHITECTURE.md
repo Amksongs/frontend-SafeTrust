@@ -39,9 +39,13 @@ src/
 ├── server/          server-only code: firebase-admin, SEP-10, secrets (FE-48)
 ├── lib/             framework-free helpers shared by ≥2 features (format, geo, utils, firebase client)
 ├── providers/       React providers composed per route group (FE-54)
-├── config/          env.ts (client) / env.server.ts (server)
+├── config/          env.ts (client) / env.edge.ts (Edge-safe) / env.server.ts (server)
 └── types/           cross-feature types only (feature types live in features/<x>/model)
 ```
+
+See [`src/server/README.md`](../src/server/README.md) for the server-only
+boundary, secret handling, and the reason the Edge-compatible ID-token verifier
+remains in `lib/`.
 
 ---
 
@@ -76,4 +80,23 @@ ESLint rules in `eslint.config.mjs` enforce these layer boundaries automatically
 - **Presentational UI isolation (`src/components/ui/**/*.{ts,tsx}`)**: Banned from importing `@/features/*`, `@/hooks/*`, `@/providers/*`, `@/server/*`, `@/lib/mockData*`, `@/lib/demo*`.
 - **Feature encapsulation (`src/features/**/*.{ts,tsx}`)**: Banned from deep imports into other features (`@/features/*/*`) and cannot reach `@/server/*` or `@/app/*`.
 - **Shared library purity (`src/lib/**/*.{ts,tsx}`)**: Banned from depending on `@/features/*`, `@/components/*`, or `@/server/*`.
+- **Server-only boundary**: Only `src/app/api/**` and `src/server/**` may import `@/server/*`; direct `process.env` reads outside config, server, instrumentation, Next config, and tests are forbidden.
 - **Module escape prevention**: Relative imports escaping module boundaries (`../../../*`) are banned across `src/**/*.{ts,tsx}` in favor of the clean `@/` path alias.
+
+---
+
+## 5. Route Groups & Runtime Profiles (FE-54)
+
+Route groups segment the application by runtime profile, ensuring providers and heavy dependencies (such as `@creit.tech/stellar-wallets-kit` and `@trustless-work/escrow`) are mounted once per group layout rather than per page or globally at root.
+
+### Group Profiles & Mounted Providers
+
+| Group         | Routes                                                                                        | Providers Mounted                                                             | Target First-Load JS |
+| ------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | -------------------- |
+| `(marketing)` | `/`, `/rent`, `/rent/[id]`, `/hotels`, `/hotels/[id]`, `/hotels/search`, `/guest/suggestions` | `QueryProvider` only (RSC-first; no auth listener, no wallet kit)             | ≤ 180 kB             |
+| `(auth)`      | `/login`, `/register`, `/forgot-password`, `/reset-password`, `/verify-email`                 | `AuthProvider` (centered auth shell; wallet login loads kit lazily on click)  | ≤ 200 kB             |
+| `(app)`       | `/dashboard/**`                                                                               | `AuthProvider` + `QueryProvider` + sidebar shell                              | ≤ 260 kB             |
+| `(checkout)`  | `/rent/[id]/escrow/**`, `/hotels/[id]/book`, `/room`, `/bookings/**`                          | `AuthProvider` + `QueryProvider` + `WalletProviderScoped` + `EscrowProviders` | ≤ 350 kB             |
+
+- **Root `src/app/layout.tsx`**: Thin shell containing HTML, body fonts, `globals.css`, `ThemeProvider`, `DemoBanner`, and `Toaster`. Contains **no** data, auth, or wallet providers.
+- **Provider Rule**: Pages never mount providers (`grep -rn "Provider" src/app --include=page.tsx` must return 0 mounts). All providers are composed at the route group layout level.
