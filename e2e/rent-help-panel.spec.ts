@@ -28,9 +28,12 @@ test("desktop: right-edge tab opens the panel without disturbing the search", as
 
   await page.goto("/rent?q=tamarindo");
   await page.waitForLoadState("networkidle");
-  // Let the page settle its own client-side state appraisals before
-  // snapshotting the search state the panel must not disturb.
-  await page.waitForTimeout(300);
+  // Wait for the q-filtered results (only the Tamarindo listing matches)
+  // before snapshotting the search state the panel must not disturb.
+  await expect(page.getByText("1 unit available")).toBeVisible();
+  await expect(
+    page.getByRole("article", { name: "Casa Guaria, Tamarindo" }),
+  ).toBeVisible();
 
   const tab = page.getByRole("button", { name: "Help & docs" });
   await expect(tab).toBeVisible();
@@ -120,6 +123,39 @@ test("desktop: all five quick guides and full documentation link back to the sea
   } else {
     await expect(note).toHaveCount(0);
   }
+});
+
+test("help links open served guides that lead back to the search", async ({
+  page,
+}) => {
+  await page.goto("/rent?q=tamarindo");
+  await expect(page.getByText("1 unit available")).toBeVisible();
+
+  const launcher = isDesktop()
+    ? page.getByRole("button", { name: "Help & docs" })
+    : page.getByRole("button", { name: "Help", exact: true });
+  await launcher.click();
+  const dialog = page.getByRole("dialog", { name: "Help & docs" });
+  await expect(dialog).toBeVisible();
+
+  await dialog.getByRole("link", { name: /^How escrow payments work/ }).click();
+  await expect(page).toHaveURL(/\/help\/escrow-explained\?from=/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "How escrow payments work" }),
+  ).toBeVisible();
+
+  await page.getByRole("link", { name: "All guides" }).click();
+  await expect(page).toHaveURL(/\/help\?from=/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Help & docs" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /^Troubleshooting/ }),
+  ).toBeVisible();
+
+  await page.getByRole("link", { name: "Back to rentals" }).click();
+  await expect(page).toHaveURL(/\/rent\?q=tamarindo$/);
+  await expect(page.getByText("1 unit available")).toBeVisible();
 });
 
 test("desktop: filters and sort survive a help panel round trip", async ({
