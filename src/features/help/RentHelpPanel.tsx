@@ -19,9 +19,10 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { clientEnv } from "@/config/env";
+import { helpPath } from "./articles";
 
 /**
- * Short pointers to the guides published under `/help` (HD-04). The panel
+ * Short pointers to the guides served under `/help` (see `./articles`). The panel
  * links out instead of duplicating article content, and carries the current
  * "/rent" search through the `from` parameter so readers land back on the
  * same results.
@@ -91,8 +92,7 @@ export function RentHelpPanel({
     return query ? `${pathname}?${query}` : (pathname ?? "/rent");
   }, [pathname, searchParams]);
 
-  const helpHref = (path: string) =>
-    `${path}?from=${encodeURIComponent(fromParam)}`;
+  const helpHref = (path: string) => helpPath(path, fromParam);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
