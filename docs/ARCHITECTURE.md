@@ -52,10 +52,10 @@ src/
 | `features/<x>`       | `components/ui`, `components/layouts`, `lib`, `config/env`, `types`, **other features only via their `index.ts`** | `app/`, `server/`, another feature's internal modules (`@/features/*/*`) |
 | `components/ui`      | `lib/utils` only                                                                                                  | `features`, `hooks`, `providers`, `data`, `server/`                      |
 | `components/layouts` | `components/ui`, `lib`, `features/*/index.ts` (auth state only)                                                   | `server/`, demo data                                                     |
-| `server/` (Planned)  | `config/env.server`, `lib`                                                                                        | Anything client (`"use client"` modules, React)                          |
+| `server/`            | `config/env.server`, `lib`                                                                                        | Anything client (`"use client"` modules, React)                          |
 | `lib/`               | `config`, `types`                                                                                                 | `features`, `components`, `server/`                                      |
 
-> **Verified against:** `eslint.config.mjs`, `src/components/layouts/`, `src/features/` at `ad2f38d7`. Status: Current. The `server/` row is Planned until `src/server/` exists.
+> **Verified against:** `eslint.config.mjs`, `src/components/layouts/`, `src/features/` at `ad2f38d7`. Status: Current. The `server/` row is Current, since `src/server/` exists upstream.
 
 ---
 
@@ -71,7 +71,7 @@ src/
 - **Server-only boundary**: Only `src/app/api/**` and `src/server/**` may import `@/server/*`; direct `process.env` reads outside config, server, instrumentation, Next config, and tests are forbidden.
 - **Module escape prevention**: Relative imports escaping module boundaries (`../../../*`) are banned across `src/**/*.{ts,tsx}` in favor of the clean `@/` path alias.
 
-> **Verified against:** `src/features/` layout at `ad2f38d7`. Status: Current for rules 1 and 3, Planned for the per-group error boundary in rule 2. Rule 2 (server-only boundary) is Planned until `src/server/` exists.
+> **Verified against:** `src/features/` layout at `ad2f38d7`. Status: Current for rules 1 and 3, Planned for the per-group error boundary in rule 2. Rule 2 (server-only boundary) is Current.
 
 Status: Current · Verified against ad2f38d7
 

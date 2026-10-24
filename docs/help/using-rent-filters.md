@@ -28,7 +28,7 @@ Choose one of these from **Sort**:
 - **Relevance**
 - **Price: Low to High**
 - **Price: High to Low**
-- **Nearest only** (available after you share your location)
+- **Nearest** (available after you share your location)
 
 ## Reset
 
