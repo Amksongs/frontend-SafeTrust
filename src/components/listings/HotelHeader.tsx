@@ -5,8 +5,21 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { AccountMenu } from "@/components/navigation/AccountMenu";
+import { AccountMenuSkeleton } from "@/components/navigation/AccountMenuSkeleton";
 import { ChevronDown, Grid2X2, Heart, Lightbulb } from "lucide-react";
+
+/**
+ * Code-split: the menu brings in the Radix dropdown and Firebase auth state,
+ * which would otherwise land in this header's first-load JS and push the
+ * marketing/app routes past their `scripts/route-budgets.js` budgets.
+ */
+const AccountMenu = dynamic(
+  () =>
+    import("@/components/navigation/AccountMenu").then(
+      (mod) => mod.AccountMenu,
+    ),
+  { ssr: false, loading: () => <AccountMenuSkeleton /> },
+);
 
 const SearchComposer = dynamic(
   () =>

@@ -129,10 +129,13 @@ describe("HotelHeader lucide icons", () => {
 });
 
 describe("HotelHeader account menu", () => {
-  it("replaces the hard-coded name, fake bell and dead user icon", () => {
+  it("replaces the hard-coded name, fake bell and dead user icon", async () => {
     render(<HotelHeader />);
 
-    expect(screen.getByTestId("header-account-menu")).toBeInTheDocument();
+    // The menu is code-split out of the header's first-load JS.
+    expect(
+      await screen.findByTestId("header-account-menu"),
+    ).toBeInTheDocument();
     expect(screen.queryByText(/Randall Valenciano/i)).toBeNull();
     expect(screen.queryByTestId("header-notification-icon")).toBeNull();
     expect(screen.queryByTestId("header-user-icon")).toBeNull();
@@ -140,10 +143,10 @@ describe("HotelHeader account menu", () => {
     expect(document.querySelector(".bg-orange-500")).toBeNull();
   });
 
-  it("reaches Messages through the menu with a login return path", () => {
+  it("reaches Messages through the menu with a login return path", async () => {
     render(<HotelHeader />);
 
-    fireEvent.keyDown(screen.getByTestId("header-account-menu"), {
+    fireEvent.keyDown(await screen.findByTestId("header-account-menu"), {
       key: "Enter",
     });
 

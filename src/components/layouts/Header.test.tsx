@@ -72,14 +72,15 @@ describe("Header", () => {
     });
   });
 
-  it("renders the signed-out account menu when there is no user", () => {
+  it("renders the signed-out account menu when there is no user", async () => {
     render(<Header />);
-    const trigger = screen.getByTestId("header-account-menu");
+    // The menu is code-split out of the header's first-load JS.
+    const trigger = await screen.findByTestId("header-account-menu");
     expect(trigger).toHaveAccessibleName("Account menu");
     expect(trigger).not.toBeDisabled();
   });
 
-  it("shows the verified user's name and initials in the account menu", () => {
+  it("shows the verified user's name and initials in the account menu", async () => {
     mockUser = {
       uid: "user-1",
       email: "john@example.com",
@@ -89,9 +90,9 @@ describe("Header", () => {
     };
 
     render(<Header />);
-    expect(screen.getByTestId("header-account-menu")).toHaveAccessibleName(
-      "Account menu for John Doe",
-    );
+    expect(
+      await screen.findByTestId("header-account-menu"),
+    ).toHaveAccessibleName("Account menu for John Doe");
     expect(screen.getByTestId("header-account-initials")).toHaveTextContent(
       "JD",
     );
@@ -117,7 +118,7 @@ describe("Header", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("links Profile to the dashboard profile for a signed-in user", () => {
+  it("links Profile to the dashboard profile for a signed-in user", async () => {
     mockUser = {
       uid: "user-1",
       email: "john@example.com",
@@ -127,7 +128,7 @@ describe("Header", () => {
     };
     render(<Header />);
 
-    fireEvent.keyDown(screen.getByTestId("header-account-menu"), {
+    fireEvent.keyDown(await screen.findByTestId("header-account-menu"), {
       key: "Enter",
     });
 
@@ -143,10 +144,10 @@ describe("Header", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("sends a signed-out visitor to login with a return path", () => {
+  it("sends a signed-out visitor to login with a return path", async () => {
     render(<Header />);
 
-    fireEvent.keyDown(screen.getByTestId("header-account-menu"), {
+    fireEvent.keyDown(await screen.findByTestId("header-account-menu"), {
       key: "Enter",
     });
 
