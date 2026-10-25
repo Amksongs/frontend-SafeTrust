@@ -20,7 +20,7 @@ const buttonVariants = cva(
         default: [
           "border border-white/30 bg-white text-slate-900 font-semibold shadow-sm hover:shadow-md active:shadow-sm",
           "hover:bg-slate-50",
-          "dark:border-orange-700/60 dark:bg-orange-500 dark:text-slate-950 dark:ring-1 dark:ring-inset dark:ring-orange-700/60",
+          "dark:border-orange-700/60 dark:bg-orange-500 dark:text-slate-950",
           "dark:hover:bg-orange-400 dark:hover:text-slate-950",
         ].join(" "),
         // Light: translucent white, neutral border. Dark: orange border + orange-300 text.
