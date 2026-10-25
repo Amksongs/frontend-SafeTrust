@@ -63,3 +63,15 @@ export const LogoutButton = forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 LogoutButton.displayName = "LogoutButton";
+  return (
+    <Button
+      onClick={handleLogout}
+      variant="ghost"
+      aria-label="Log out"
+      className="w-full cursor-pointer justify-start gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive md:justify-center lg:justify-start"
+    >
+      <LogOut className="h-4 w-4 shrink-0" aria-hidden="true" />
+      <span className="md:hidden lg:block">Log out</span>
+    </Button>
+  );
+}
