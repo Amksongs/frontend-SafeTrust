@@ -59,10 +59,7 @@ describe("GuestSuggestionsPage – Message host", () => {
     expect(mockPush).toHaveBeenCalledWith("/dashboard/messages/conv-5");
   });
 
-  // Skipped: this page does not read the `q` search param yet, so the search
-  // filter these tests describe is not implemented. Re-enable when the
-  // filter lands (tracked in the PR description).
-  it.skip("filters the suggestions and selected listing by the applied query", () => {
+  it("filters the suggestions and selected listing by the applied query", () => {
     mockSearchParams.set("q", "Heredia");
 
     render(<GuestSuggestionsPage />);
@@ -82,8 +79,7 @@ describe("GuestSuggestionsPage – Message host", () => {
     ).not.toBeInTheDocument();
   });
 
-  // Skipped: depends on the search filter (q param), which this page does not implement yet.
-  it.skip("renders an empty state without selected-listing actions when nothing matches", () => {
+  it("renders an empty state without selected-listing actions when nothing matches", () => {
     mockSearchParams.set("q", "No such place");
 
     render(<GuestSuggestionsPage />);
