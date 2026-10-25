@@ -14,13 +14,6 @@ import { Separator } from "@/components/ui/separator";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { setSessionCookie } from "@/lib/auth/session";
 import { resolveRedirectPath } from "@/lib/auth/redirect";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Illustration from "@/components/auth/ui/Illustration";
 import {
   AuthMotion,

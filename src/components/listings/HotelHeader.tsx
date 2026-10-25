@@ -6,16 +6,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { AccountMenu } from "@/components/navigation/AccountMenu";
-import { useSharedGeolocation } from "@/providers/GeolocationProvider";
-import { ChevronDown, Grid2X2, Heart, Lightbulb, Search } from "lucide-react";
-import {
-  Bell,
-  ChevronDown,
-  CircleUserRound,
-  Grid2X2,
-  Heart,
-  Lightbulb,
-} from "lucide-react";
+import { ChevronDown, Grid2X2, Heart, Lightbulb } from "lucide-react";
 
 const SearchComposer = dynamic(
   () =>
