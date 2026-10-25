@@ -32,7 +32,7 @@ test("Nearby location survives navigation from suggestions to rentals", async ({
       ),
     )
     .toBe(0);
-  await where.click();
+  await searchTrigger.click();
   await page
     .getByRole("option", { name: /Nearby.*Find what's around you/ })
     .click();
