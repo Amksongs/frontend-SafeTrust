@@ -25,7 +25,7 @@ const buttonVariants = cva(
         ].join(" "),
         // Light: translucent white, neutral border. Dark: orange border + orange-300 text.
         outline: [
-          "border border-border bg-background/70 text-foreground shadow-sm backdrop-blur-sm hover:bg-accent",
+          "border border-border bg-background/70 text-foreground shadow-sm backdrop-blur-sm hover:bg-orange-50",
           "dark:border-orange-700 dark:text-orange-300",
           "hover:dark:bg-orange-500/10",
           "dark:hover:text-orange-200",
