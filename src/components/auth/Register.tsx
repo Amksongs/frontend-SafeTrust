@@ -236,11 +236,7 @@ export default function RegisterPage() {
                     className="flex h-9 w-full sm:w-32 items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-900"
                   >
                     {COUNTRY_CODES.map(({ code, country, flag }) => (
-                      <option
-                        key={code}
-                        value={code}
-                        className="dark:bg-gray-900 text-foreground"
-                      >
+                      <option key={code} value={code} className="dark:bg-gray-900 text-foreground">
                         {flag} {code} — {country}
                       </option>
                     ))}
@@ -277,37 +273,13 @@ export default function RegisterPage() {
                   }}
                   className="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-900"
                 >
-                  <option
-                    value=""
-                    disabled
-                    className="dark:bg-gray-900 text-foreground"
-                  >
+                  <option value="" disabled className="dark:bg-gray-900 text-foreground">
                     Select your location
                   </option>
-                  <option
-                    value="cr"
-                    className="dark:bg-gray-900 text-foreground"
-                  >
-                    Costa Rica
-                  </option>
-                  <option
-                    value="us"
-                    className="dark:bg-gray-900 text-foreground"
-                  >
-                    United States
-                  </option>
-                  <option
-                    value="mx"
-                    className="dark:bg-gray-900 text-foreground"
-                  >
-                    Mexico
-                  </option>
-                  <option
-                    value="es"
-                    className="dark:bg-gray-900 text-foreground"
-                  >
-                    Spain
-                  </option>
+                  <option value="cr" className="dark:bg-gray-900 text-foreground">Costa Rica</option>
+                  <option value="us" className="dark:bg-gray-900 text-foreground">United States</option>
+                  <option value="mx" className="dark:bg-gray-900 text-foreground">Mexico</option>
+                  <option value="es" className="dark:bg-gray-900 text-foreground">Spain</option>
                 </select>
               </AuthMotionItem>
 
