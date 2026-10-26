@@ -208,11 +208,7 @@ export function EditProfileForm() {
                 className="h-9 w-28 shrink-0 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-800"
               >
                 {COUNTRY_CODES.map(({ code, flag, label }) => (
-                  <option
-                    key={code}
-                    value={code}
-                    className="dark:bg-gray-900 text-foreground"
-                  >
+                  <option key={code} value={code} className="dark:bg-gray-900 text-foreground">
                     {flag} {label}
                   </option>
                 ))}
