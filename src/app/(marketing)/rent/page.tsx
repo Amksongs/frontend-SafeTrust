@@ -24,7 +24,6 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
   BookOpen,
-  Check,
   LayoutDashboard,
   Lightbulb,
   SlidersHorizontal,
